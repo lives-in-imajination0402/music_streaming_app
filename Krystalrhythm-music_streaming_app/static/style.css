@@ -1,0 +1,47 @@
+
+.button{
+    background-color: rgb(224, 56, 219);
+    border : 1px solid;
+    color: aliceblue;
+    cursor : pointer;
+    transition: background-color 0.3s ease;
+}
+.button:hover{
+    background-color: aliceblue;
+    color: rgb(247, 0, 255);
+}
+
+
+.container {
+    background-color: #ef6225;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+
+.vanish {
+    animation: vanish 0.5s forwards;
+}
+
+@keyframes vanish{
+    0%{
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100%{
+        transform: translateY(-10%);
+        opacity: 0;
+    }
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+}
+
+.row{
+    background-color: #ef6225;
+}
+
+

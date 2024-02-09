@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %} Search Results - KrystalRhythm {% endblock %}
+{% block content %}
+
+  <h2>Search Results for '{{ search_query }}'</h2>
+
+  {% if albums or songs %}
+    {% for album in albums %}
+      <h3>Album: {{ album.album_name }}</h3>
+      <ul>
+        {% for song in album.songs %}
+          <li>{{ song.song_name }} (Genre: {{ song.genre }}, Ratings: {{ song.average_ratings }})</li>
+          <a href="{{ url_for('lyrics', song_id=song.id) }}" class="icon-link">
+            <i class="fa-regular fa-note-sticky"></i>
+          </a>
+          <audio controls>
+            <source src="{{ url_for('static', filename='songs_upload/' + song.audio_data) }}" type="audio/mpeg"/>
+          </audio>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+
+    <h3>Individual Songs</h3>
+    <ul>
+      {% for song in songs %}
+        <li>{{ song.song_name }} (Genre: {{ song.genre }}, Ratings: {{ song.average_ratings }})</li>
+        <a href="{{ url_for('lyrics', song_id=song.id) }}" class="icon-link">
+          <i class="fa-regular fa-note-sticky"></i>
+        </a>
+        <audio controls>
+          <source src="{{ url_for('static', filename='songs_upload/' + song.audio_data) }}" type="audio/mpeg"/>
+        </audio>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No results found for '{{ search_query }}'.</p>
+  {% endif %}
+
+{% endblock %}

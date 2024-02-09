@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block title %} All Songs - KrystalRhythm {% endblock %}
+{% block content %}
+<div class="container">
+    <h1>All Songs</h1>
+
+    <div class="row">
+        {% for song in songs|sort(attribute='average_ratings', reverse=true) %}
+        {% if not song.flagged %}
+        <div class="col-md-4 mb-4">
+            <div class="card" style="width: 100%;">
+                {% if song.image_data %}
+                <img src="{{ url_for('static', filename='images/' + song.image_data) }}" class="card-img-top" alt="{{ song.song_name }} Image" style="width: 407px; height: 200px;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ song.song_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ song.artist_name }}</h6>
+                    <p class="card-text">{{ song.album_name }}</p>
+                    <p class="card-text">{{ song.genre }}</p>
+                    
+                    <p class="card-text"><i class="fa-solid fa-thumbs-up"></i> : {{ song.average_ratings }}</p>
+
+                    <form method="post" action="{{ url_for('rate_song', id=song.id) }}">
+                        <label for="rating"><i class="fa-solid fa-star"></i>:</label>
+                        
+                          <select id="rating" name="rating">
+                            <option value="1">&#9733;</option>
+                            <option value="2">&#9733;&#9733;</option>
+                            <option value="3">&#9733;&#9733;&#9733;</option>
+                            <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+                            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+                          </select>
+                        
+                        <button type="submit" class="button">Submit</button>
+                    </form>
+                      
+
+                    <a href="{{ url_for('lyrics', song_id=song.id) }}" class="icon-link">
+                        <i class="fa-regular fa-note-sticky"></i>
+                    </a>
+
+                    <audio controls>
+                        <source src="{{ url_for('static', filename='songs_upload/' + song.audio_data) }}" type="audio/mpeg"/>
+                    </audio>
+                </div>
+            </div>
+        </div>
+
+        {% if loop.index % 3 == 0 %}
+            </div><div class="row">
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+    </div>
+</div>
+
+<style>
+    .button{
+        background-color: rgb(224, 56, 219);
+        border : 1px solid;
+        color: aliceblue;
+        cursor : pointer;
+        transition: background-color 0.3s ease;
+    }
+    .button:hover{
+        background-color: aliceblue;
+        color: rgb(247, 0, 255);
+    }
+    
+    .vanish {
+        animation: vanish 0.5s forwards;
+    }
+
+    @keyframes vanish{
+        0%{
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100%{
+            transform: translateY(-10%);
+            opacity: 0;
+        }
+    }
+
+    .star-dropdown {
+        font-size: 24px; /* Adjust the font size as needed */
+    }
+
+/* Optional: Style the dropdown arrow */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  padding-right: 20px; /* Adjust as needed */
+  border: none;
+  outline: none;
+}
+
+select::after {
+  content: '\25BC'; /* Unicode character for a downward-pointing triangle or arrow */
+  position: absolute;
+  top: 50%;
+  right: 5px; /* Adjust as needed */
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+
+</style>
+
+
+
+{% endblock %}

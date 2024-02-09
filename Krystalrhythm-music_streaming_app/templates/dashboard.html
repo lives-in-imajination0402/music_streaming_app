@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block title %} Dashboard - KrystalRhythm {% endblock %}
+
+{% block content %}
+<div class="row">
+  <h1>Hello @{{ current_user.username }}!</h1>
+  
+  {% if not current_user.is_creator %}
+  <form method="post" action="{{ url_for('become_creator') }}">
+    <button id="becomeCreatorButton" type="submit">Become a Creator</button>
+  </form>
+{% endif %}
+  <!-- First Div: Song Details -->
+  <div class="col-md-4">
+    
+
+    <h2>Latest Releases</h2>
+    {% for song in songs %}
+    {% if not song.flagged %}
+    <div class="card mb-3" style="width: 20rem">
+      {% if song.image_data %}
+      <img src="{{ url_for('static', filename='images/' + song.image_data) }}" class="card-img-top" alt="{{ song.song_name }} Image">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ song.song_name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ song.artist_name }}</h6>
+        <p class="card-text">{{ song.album_name }}</p>
+        <p class="card-text">{{ song.genre }}</p>
+        
+
+        
+        
+        <a href="{{ url_for('lyrics', song_id=song.id) }}" class="icon-link">
+          <i class="fa-regular fa-note-sticky"></i>
+        </a>
+
+        <audio controls>
+          <source
+            src="{{ url_for('static', filename='songs_upload/' + song.audio_data) }}"
+            type="audio/mpeg"
+          />
+        </audio>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('all_songs') }}" id="viewallsongs" class="btn btn-primary">All Songs</a>
+
+  </div>
+  
+  <!-- Second Div: Genres and Albums -->
+<div class="col-md-4">
+  <h2>Genres</h2>
+
+  {% for genre, songs in genre_songs.items() %}
+    <div class="card mb-3" style="width: 20rem">
+      <div class="card-body">
+        <h5 class="card-title">{{ genre }}</h5>
+        {% if songs %}
+          <ul class="list-group">
+            {% for song in songs %}
+              <li class="list-group-item">
+                <strong>{{ song.song_name }}</strong> by {{ song.artist_name }} - {{ song.album.album_name }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="card-text">No songs found for {{ genre }}.</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+  <h2>Albums</h2>
+
+  {% for album_name, album_songs in album_songs.items() %}
+    <div class="card mb-3" style="width: 20rem">
+      <div class="card-body">
+        <h5 class="card-title">{{ album_name }}</h5>
+        {% if album_songs %}
+          <ul class="list-group">
+            {% for song in album_songs %}
+              <li class="list-group-item">
+                <strong>{{ song.song_name }}</strong> by {{ song.artist_name }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="card-text">No songs found for {{ album_name }}.</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+  <!-- Third Div: User's Playlist -->
+  <div class="col-md-4">
+    <h2>User's Playlists</h2>
+  
+    {% for playlist in playlists %}
+    <div class="card mb-3" style="width: 20rem">
+        <div class="card-body">
+          <a href="{{ url_for('view_playlist', playlist_id=playlist.id) }}">
+            
+          <h5 class="card-title">{{ playlist.playlist_name }}</h5>
+          </a>
+          {% if playlist.songs %}
+            <ul>
+              {% for song in playlist.songs %}
+                <li>{{ song.song_name }} - {{ song.artist_name }}</li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p>No songs in this playlist</p>
+          {% endif %}
+          <a href="{{ url_for('edit_playlist', playlist_id=playlist.id) }}" class="btn btn-primary">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+          <a href="{{ url_for('delete_playlist', playlist_id=playlist.id) }}" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i>
+          </a>
+          
+        </div>
+      </div>
+    {% endfor %}
+    <br>
+
+  
+    <a href="{{ url_for('create_playlist') }}" class="btn btn-success">
+      <i class="fa-solid fa-plus"> New </i>
+    </a>
+  </div>
+{% endblock %}
+
+{% block script %} 
+  <!-- Add any script-specific code here if needed -->
+{% endblock %}

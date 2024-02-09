@@ -1,0 +1,191 @@
+{% extends 'layout.html' %}
+{% block title %}
+Admin Dashboard - KrystalRhythm
+{% endblock %}
+{% block content %}
+<style>
+    
+
+    .card-container {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .card {
+        background-color: #778750;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 18rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<h1>Admin Dashboard</h1>
+<p>Welcome, {{ current_user.username }}!</p>
+
+
+<div class="card-container">
+    <div class="card">
+        <h2>Total Users</h2>
+        <h4>{{ total_users }}</h4>
+    </div>
+
+    <div class="card">
+        <h2>Total Creators</h2>
+        <h4>{{ total_creators }}</h4>
+    </div>
+
+    <div class="card">
+        <h2>Total Albums</h2>
+        <h4>{{ total_albums }}</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Song/Album Management:</h2>
+        {% if songs %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Song ID</th>
+                        <th>Song Name</th>
+                        <th>Album Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for song in songs %}
+                        <tr>
+                            <td>{{ song.id }}</td>
+                            <td>{{ song.song_name }}</td>
+                            <td>{{ song.album.album_name }}</td>
+                            <td>
+                                {% if not song.flagged %}
+                                    <a href="{{ url_for('admin_flag_song', song_id=song.id) }}" style = "text-decoration: none;">
+                                        <i class="fa-regular fa-flag"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('admin_unflag_song', song_id=song.id) }}" style="text-decoration: none;">
+                                        <i class="fa-solid fa-flag"></i>
+                                    </a>
+                                {% endif %}
+                                    <span style="margin-right: 10px;"></span>
+                                    <a href="{{ url_for('admin_remove_song', song_id=song.id) }}" style = "text-decoration: none;">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                    <span style="margin-right: 10px;"></span>
+                                    <a href="{{ url_for('lyrics', song_id=song.id) }}" class="icon-link">
+                                        <i class="fa-regular fa-note-sticky"></i>
+                                      </a>
+                                    <span style="margin-right: 10px;"></span>
+                                    <audio controls>
+                                     <source
+                                          src="{{ url_for('static', filename='songs_upload/' + song.audio_data) }}"
+                                          type="audio/mpeg"
+                                        />
+                                    </audio>
+                                
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No songs available.</p>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Blacklisted Creators:</h2>
+            {% if creators %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Creator ID</th>
+                            <th>Creator Username</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for creator in creators %}
+                            {% if creator.is_blacklisted %}
+                                <tr>
+                                    <td>{{ creator.id }}</td>
+                                    <td>{{ creator.username }}</td>
+                                    <td>
+                                        <form action="{{ url_for('admin_whitelist_creator', creator_id=creator.id) }}" method="post" style="display: inline;">
+                                            <button type="submit" class="btn btn-success">Whitelist</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if not blacklisted_creators %}
+                    <p>No blacklisted creators available.</p>
+                {% endif %}
+            {% else %}
+                <p>No creators available.</p>
+            {% endif %}
+        </div>
+    
+        <div class="col-md-6">
+            <h2>Whitelisted Creators:</h2>
+            {% if creators %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Creator ID</th>
+                            <th>Creator Username</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for creator in creators %}
+                            {% if not creator.is_blacklisted %}
+                                <tr>
+                                    <td>{{ creator.id }}</td>
+                                    <td>{{ creator.username }}</td>
+                                    <td>
+                                        <form action="{{ url_for('admin_blacklist_creator', creator_id=creator.id) }}" method="post" style="display: inline;">
+                                            <button type="submit" class="btn btn-danger">Blacklist</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            {% else %}
+                <p>No creators available.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Song Genre Distribution:</h2>
+        <img src="{{ url_for('static', filename='songs_per_genre_bar_chart.png') }}" alt="Songs per Genre Bar Chart">
+    </div>
+</div>
+
+<div class = "row">
+    <div class = "col-m-12">
+        <h2>Number of creators and their songs</h2>
+        <img src="{{ url_for('static', filename = 'songs_per_creator_bar_chart.png')}}" alt="Songs per creator">
+    </div>
+</div>
+
+{% endblock %}
+

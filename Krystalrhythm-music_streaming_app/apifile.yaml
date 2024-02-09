@@ -1,0 +1,973 @@
+openapi: 3.0.0
+info:
+  title: KrystalRhythm
+  description: >
+    <div><h4>KrystalRhythm, a revolutionary music app, redefines the auditory experience with its cutting-edge features. This app seamlessly blends artificial intelligence and user preferences to curate personalized playlists, ensuring an immersive musical journey. Its intuitive interface and dynamic algorithms adapt to users' moods, creating a harmonious blend of genres. KrystalRhythm goes beyond conventional streaming, offering an innovative visual representation of music through mesmerizing graphics that synchronize with beats. With a vast library of tracks and constant updates, this app caters to diverse tastes, making it a must-have for music enthusiasts seeking a unique, tailored sonic adventure. Elevate your listening experience with KrystalRhythm – where technology meets melody.</h4>
+    </div>
+
+    <h2>User Table</h2>
+    <table>
+        <thead>
+            <th>Column Name</th>
+            <th>Column Type</th>
+            <th>Constraints</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>Integer</td>
+                <td>Primary Key, Auto Increment</td>
+            </tr>
+            <tr>
+                <td>username</td>
+                <td>String(64)</td>
+                <td>Unique, Not Null</td>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td>String(120)</td>
+                <td>Unique, Not Null</td>
+            </tr>
+            <tr>
+                <td>password_hash</td>
+                <td>String(128)</td>
+                <td>Not Null</td>
+            </tr>
+            <tr>
+                <td>is_creator</td>
+                <td>Boolean</td>
+                <td>Default: False</td>
+            </tr>
+            <tr>
+                <td>is_admin</td>
+                <td>Boolean</td>
+                <td>Default: False</td>
+            </tr>
+            <tr>
+                <td>is_blacklisted</td>
+                <td>Boolean</td>
+                <td>Default: False</td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+
+    <h2>Album Table</h2>
+        <table>
+            <thead>
+                <th>Column Name</th>
+                <th>Column Type</th>
+                <th>Constraints</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td>Integer</td>
+                    <td>Primary Key, Auto Increment</td>
+                </tr>
+                <tr>
+                    <td>album_name</td>
+                    <td>String(64)</td>
+                    <td>Not Null</td>
+                </tr>
+                <tr>
+                    <td>artist_name</td>
+                    <td>String(64)</td>
+                    <td>Not Null</td>
+                </tr>
+                <tr>
+                    <td>date</td>
+                    <td>String</td>
+                    <td>Not Null</td>
+                </tr>
+            </tbody>
+        </table>
+
+    <h2>Playlist Table</h2>
+      <table>
+          <thead>
+              <th>Column Name</th>
+              <th>Column Type</th>
+              <th>Constraints</th>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>id</td>
+                  <td>Integer</td>
+                  <td>Primary Key, Auto Increment</td>
+              </tr>
+              <tr>
+                  <td>author</td>
+                  <td>Integer</td>
+                  <td>Foreign Key (user.id), Not Null</td>
+              </tr>
+              <tr>
+                  <td>playlist_name</td>
+                  <td>String</td>
+                  <td>Not Null</td>
+              </tr>
+          </tbody>
+      </table>
+      
+      <h2>playlist_songs Table</h2>
+      <table>
+          <thead>
+              <th>Column Name</th>
+              <th>Column Type</th>
+              <th>Constraints</th>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>playlist_id</td>
+                  <td>Integer</td>
+                  <td>Foreign Key (playlist.id), Primary Key</td>
+              </tr>
+              <tr>
+                  <td>song_id</td>
+                  <td>Integer</td>
+                  <td>Foreign Key (songs.id), Primary Key</td>
+              </tr>
+          </tbody>
+      </table>
+
+    <h2>Songs Table</h2>
+          <table>
+              <thead>
+                  <th>Column Name</th>
+                  <th>Column Type</th>
+                  <th>Constraints</th>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>id</td>
+                      <td>Integer</td>
+                      <td>Primary Key, Auto Increment</td>
+                  </tr>
+                  <tr>
+                      <td>song_name</td>
+                      <td>String(64)</td>
+                      <td>Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>artist_name</td>
+                      <td>String(64)</td>
+                      <td>Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>album_id</td>
+                      <td>Integer</td>
+                      <td>Foreign Key (album.id), Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>user_id</td>
+                      <td>Integer</td>
+                      <td>Foreign Key (user.id), Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>audio_data</td>
+                      <td>String</td>
+                      <td></td>
+                  </tr>
+                  <tr>
+                      <td>ratings</td>
+                      <td>Integer</td>
+                      <td></td>
+                  </tr>
+                  <tr>
+                      <td>genre</td>
+                      <td>String(64)</td>
+                      <td>Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>lyrics</td>
+                      <td>String</td>
+                      <td>Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>flagged</td>
+                      <td>Boolean</td>
+                      <td>Default: False</td>
+                  </tr>
+                  <tr>
+                      <td>duration</td>
+                      <td>String</td>
+                      <td>Not Null</td>
+                  </tr>
+                  <tr>
+                      <td>users_rated_count</td>
+                      <td>Integer</td>
+                      <td>Default: 0</td>
+                  </tr>
+                  <tr>
+                      <td>average_ratings</td>
+                      <td>Float</td>
+                      <td>Default: 0.0</td>
+                  </tr>
+                  <tr>
+                      <td>image_data</td>
+                      <td>String</td>
+                      <td></td>
+                  </tr>
+              </tbody>
+          </table>
+        
+        
+    
+      
+     
+
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000/
+paths:
+  /api/user/{id}:
+    description: Url to read and update the user resource.
+    get:
+      description: Operation to read user resource
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: Kavya
+                  email:
+                    type: string
+                    example: anusathish@gmail.com
+
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+  /api/user:
+    description: Url to create user resource
+    post:
+      description: Operation to create the user resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Kavya
+                email:
+                  type: string
+                  example: anusathish@gmail.com
+                password:
+                  type: string
+                  example: 1234
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: Kavya
+                  email:
+                    type: string
+                    example: anusathish@gmail.com
+                  password:
+                    type: string
+                    example: 1234
+        '409':
+          description: User already exists
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+
+  /api/songs/{id}:
+    description: Url to read,update and delete the venue
+    get:
+      description: operation to read the song
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    song_name:
+                      type: string
+                      example: Blue bird
+                    artist_name:
+                      type: string
+                      example: Ikimono gakari
+                    album_id:
+                      type: integer
+                      example: 7
+                    user_id:
+                      type: integer
+                      example: 2
+                    audio_data:
+                      type: string
+                      example: naruto.mp3
+                    ratings:
+                      type: integer
+                      example: 5
+                    lyrics:
+                      type: string
+                      example: "Habataitara modorenai to itte Mezashita no wa aoi aoi ano sora..."
+                    flagged:
+                      type: boolean
+                      example: 1
+                    duration:
+                      type: string
+                      example: 3:20
+                    users_rated_count:
+                      type: integer
+                      example: 1
+                    average_ratings:
+                      type: integer
+                      example: 5
+                    image_data:
+                      type: string
+                      example: naruto.png
+        '400':
+          description: Invalid song id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: song not found
+        '500':
+          description: Internal Server Error
+
+    put:
+      description: operation to update the song
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+          
+            
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                song_name:
+                      type: string
+                      example: Blue bird
+                artist_name:
+                      type: string
+                      example: Ikimono gakari
+                album_id:
+                      type: integer
+                      example: 7
+                user_id:
+                      type: integer
+                      example: 2
+                audio_data:
+                      type: string
+                      example: naruto.mp3
+                ratings:
+                      type: integer
+                      example: 5
+                lyrics:
+                      type: string
+                      example: "Habataitara modorenai to itte Mezashita no wa aoi aoi ano sora..."
+                flagged:
+                      type: boolean
+                      example: 1
+                duration:
+                      type: string
+                      example: 3:20
+                users_rated_count:
+                      type: integer
+                      example: 1
+                average_ratings:
+                      type: integer
+                      example: 5
+                image_data:
+                      type: string
+                      example: naruto.png
+                genre:
+                      type: string
+                      example: Jpop
+                  
+      responses:
+        '201':
+          description: song Update successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    song_name:
+                      type: string
+                      example: Blue bird
+                    artist_name:
+                      type: string
+                      example: Ikimono gakari
+                    album_id:
+                      type: integer
+                      example: 7
+                    user_id:
+                      type: integer
+                      example: 2
+                    audio_data:
+                      type: string
+                      example: naruto.mp3
+                    ratings:
+                      type: integer
+                      example: 5
+                    lyrics:
+                      type: string
+                      example: "Habataitara modorenai to itte Mezashita no wa aoi aoi ano sora..."
+                    flagged:
+                      type: boolean
+                      example: 1
+                    duration:
+                      type: string
+                      example: 3:20
+                    users_rated_count:
+                      type: integer
+                      example: 1
+                    average_ratings:
+                      type: integer
+                      example: 5
+                    image_data:
+                      type: string
+                      example: naruto.png
+                    genre:
+                      type: string
+                      example: Jpop
+        '404':
+          description: song not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  
+    delete:
+      description: operation to delete the song
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+        
+      responses:
+        '200':
+          description: Successfully deleted
+        '400':
+          description: Invalid song_id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: song not found
+        '500':
+          description: Internal Server Error
+          
+  /api/songs:
+    post:
+      description: Endpoint to create a new song
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                song_name:
+                      type: string
+                      example: Blue bird
+                artist_name:
+                      type: string
+                      example: Ikimono gakari
+                album_id:
+                      type: integer
+                      example: 7
+                user_id:
+                      type: integer
+                      example: 2
+                audio_data:
+                      type: string
+                      example: naruto.mp3
+                ratings:
+                      type: integer
+                      example: 5
+                lyrics:
+                      type: string
+                      example: "Habataitara modorenai to itte Mezashita no wa aoi aoi ano sora..."
+                flagged:
+                      type: boolean
+                      example: 1
+                duration:
+                      type: string
+                      example: 3:20
+                users_rated_count:
+                      type: integer
+                      example: 1
+                average_ratings:
+                      type: integer
+                      example: 5
+                image_data:
+                      type: string
+                      example: naruto.png
+                genre:
+                      type: string
+                      example: Jpop
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  song_name:
+                      type: string
+                      example: Blue bird
+                  artist_name:
+                      type: string
+                      example: Ikimono gakari
+                  album_id:
+                      type: integer
+                      example: 7
+                  user_id:
+                      type: integer
+                      example: 2
+                  audio_data:
+                      type: string
+                      example: naruto.mp3
+                  ratings:
+                      type: integer
+                      example: 5
+                  lyrics:
+                      type: string
+                      example: "Habataitara modorenai to itte Mezashita no wa aoi aoi ano sora..."
+                  flagged:
+                      type: boolean
+                      example: 1
+                  duration:
+                      type: string
+                      example: 3:20
+                  users_rated_count:
+                      type: integer
+                      example: 1
+                  average_ratings:
+                      type: integer
+                      example: 5
+                  image_data:
+                      type: string
+                      example: naruto.png
+                  genre:
+                      type: string
+                      example: Jpop
+        '409':
+          description: Song already exists
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/album/{id}:
+    description: URL to read, update, and delete the album
+    get:
+      description: Operation to read the album
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  album_name:
+                    type: string
+                    example: Naruto
+                  artist_name:
+                    type: string
+                    example: Ikimono Gakari
+                  date:
+                    type: string
+                    format: date
+                    example: 2012-06-06
+        '400':
+          description: Invalid album id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Album not found
+        '500':
+          description: Internal Server Error
+
+    put:
+      description: Operation to update the album
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                album_name:
+                    type: string
+                    example: Naruto
+                artist_name:
+                    type: string
+                    example: Ikimono Gakari
+                date:
+                    type: string
+                    format: date
+                    example: 2012-06-06
+      responses:
+        '201':
+          description: Album update successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  album_name:
+                    type: string
+                    example: Naruto
+                  artist_name:
+                    type: string
+                    example: Ikimono Gakari
+                  date:
+                    type: string
+                    format: date
+                    example: 2012-06-06
+        '404':
+          description: Album not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    delete:
+      description: Operation to delete the album
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully deleted
+        '400':
+          description: Invalid album_id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Album not found
+        '500':
+          description: Internal Server Error
+
+  /api/album:
+    post:
+      description: Endpoint to create a new album
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                album_name:
+                    type: string
+                    example: Naruto
+                artist_name:
+                    type: string
+                    example: Ikimono Gakari
+                date:
+                    type: string
+                    format: date
+                    example: 2012-06-06
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  album_name:
+                    type: string
+                    example: Naruto
+                  artist_name:
+                    type: string
+                    example: Ikimono Gakari
+                  date:
+                    type: string
+                    format: date
+                    example: 2012-06-06
+        '409':
+          description: Album already exists
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/playlist/{id}:
+    description: URL to read, update, and delete the playlist
+    get:
+      description: Operation to read the playlist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    type: integer
+                    example: 1
+                  playlist_name:
+                    type: string
+                    example: my_playlist
+                  
+        '404':
+          description: Playlist not found
+        '500':
+          description: Internal Server Error
+
+    put:
+      description: Operation to update the playlist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                    type: integer
+                    example: 1
+                playlist_name:
+                    type: string
+                    example: my_playlist
+      responses:
+        '201':
+          description: Playlist update successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    type: integer
+                    example: 1
+                  playlist_name:
+                    type: string
+                    example: my_playlist
+        '404':
+          description: Playlist not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    delete:
+      description: Operation to delete the playlist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully deleted
+        '404':
+          description: Playlist not found
+        '500':
+          description: Internal Server Error
+
+  /api/playlist:
+    post:
+      description: Endpoint to create a new playlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                author:
+                    type: integer
+                    example: 1
+                playlist_name:
+                    type: string
+                    example: my_playlist
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  author:
+                    type: integer
+                    example: 1
+                  playlist_name:
+                    type: string
+                    example: my_playlist
+        '409':
+          description: Playlist already exists
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string

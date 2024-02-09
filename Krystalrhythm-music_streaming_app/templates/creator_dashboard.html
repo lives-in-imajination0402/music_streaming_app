@@ -1,0 +1,54 @@
+{% extends 'layout.html' %} {% block title %} Creator Dashboard - KrystalRhythm
+{% endblock %} {% block content %}
+<h1>Creator Dashboard</h1>
+<p>Welcome, {{ current_user.username }}!</p>
+
+<div>
+  
+  <ul>
+    <li><a href="{{ url_for('create_song') }}">Create a Song</a></li>
+  </ul>
+</div>
+
+<div>
+  <h2>Your Uploaded Songs:</h2>
+  {% if creator_songs %}
+  <table>
+    <thead>
+      <tr>
+        <th>Song ID</th>
+        <th>Song Name</th>
+        <th>Album Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for song in creator_songs %}
+      <tr>
+        <td>{{ song.id }}</td>
+        <td>{{ song.song_name }}</td>
+        <td>{{ song.album.album_name }}</td>
+        <td>
+          <button
+            class="btn btn-primary"
+            onclick="window.location.href='/edit_song/{{song.id}}'"
+          >
+            Edit song
+          </button>
+          <button
+            class="btn btn-danger"
+            onclick="window.location.href='/delete_song/{{song.id}}'"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No songs uploaded yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

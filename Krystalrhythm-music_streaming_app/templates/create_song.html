@@ -1,0 +1,76 @@
+{% extends 'layout.html' %} {% block title %} Create a Song - KrystalRhythm {%
+endblock %} {% block content %}
+<style>
+  body {
+      background-color: #ef6225;
+      font-family: "Roboto", sans-serif;
+      color : white;
+  }
+  .container {
+      background-color: #ef6225;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+  }
+  .form-label {
+      font-weight: bold;
+  }
+  .form-control {
+      border-radius: 5px;
+  }
+  .btn {
+      border-radius: 5px;
+  }
+  form{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid black;
+      border-radius: 15px;
+      width: 50%;
+      margin: auto;
+  }
+  h1{
+      margin-top: 64px;
+      text-align: center;
+  }
+
+</style>
+<h1>Create a Song</h1>
+<form
+  action="{{ url_for('create_song') }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <label for="song_name">Song Name:</label>
+  <input type="text" name="song_name" required /><br />
+
+  <label for="artist_name">Artist Name:</label>
+  <input type="text" name="artist_name" required /><br />
+
+  <label for="album_name">Album Name:</label>
+  <input type="text" name="album_name" required /><br />
+
+  <label for="genre">Genre:</label>
+  <input type="text" name="genre" required /><br />
+
+  <label for="date">Release Date:</label>
+  <input type="date" name="date" required /><br />
+  
+
+  <label for="lyrics">Lyrics:</label>
+  <textarea name="lyrics" rows="4" cols="25" required></textarea><br />
+
+  <label for="time">Duration:</label>
+    <input type="time" name="duration"  required /><br />
+
+
+  <label for="audio_data">Upload MP3 File:</label>
+  <input type="file" name="audio_data" accept=".mp3" required /><br />
+
+  <label for="image_data">Upload Image File:</label>
+  <input type="file" name="image_data" accept=".jpg, .jpeg, .png" required /><br />
+
+  <button type="submit">Create Song</button>
+</form>
+{% endblock %}

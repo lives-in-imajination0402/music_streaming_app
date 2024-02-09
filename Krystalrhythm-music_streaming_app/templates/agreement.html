@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}
+Creator-KrystalRhytm
+{% endblock %}
+{% block content %}
+<h1>Music Creator Agreement</h1>
+    <p>Please read and accept the following duties and functionalities as a music creator:</p>
+
+    <ul>
+        <li>Access all functionalities of a general user.</li>
+        <li>Create new songs, lyrics, and albums.</li>        
+        <li>Edit existing songs, lyrics, and albums.</li>
+        <li>Change lyrics, artists' names, song attributes, and album names.</li>
+        <li>Remove existing songs, lyrics, and albums.</li>
+        <li>Assign a song to a particular album.</li>
+        <li>Lyrics shoukd not mean any vulgar,foul things</li>
+    </ul>
+    
+    <form action="{{ url_for('agree_to_creator') }}" method="post">
+        <label>
+            <input type="checkbox" name="agree" required>
+            I have read and agree to the Music Creator Duties and Functionalities.
+        </label>
+        <br>
+        <button type="submit">Accept and Become a Music Creator</button>
+    </form>
+
+{% endblock %}
+

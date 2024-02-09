@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block title %}
+Create Playlist - KrystalRhythm
+{% endblock %}
+{% block content %}
+<style>
+    body {
+        background-color: #ef6225;
+        font-family: "Roboto", sans-serif;
+        color : white;
+    }
+    .container {
+        background-color: #ef6225;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .form-control {
+        border-radius: 5px;
+    }
+    .btn {
+        border-radius: 5px;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid black;
+        border-radius: 15px;
+        width: 50%;
+        margin: auto;
+    }
+    h1,p{
+        margin-top: 64px;
+        text-align: center;
+    }
+
+</style>
+<h1>Create Playlist</h1>
+<p>Welcome, {{ user.username }}!</p>
+
+<form action="{{ url_for('create_playlist') }}" method="post">
+    <label for="playlist_name">Playlist Name:</label>
+    <input type="text" id="playlist_name" name="playlist_name" required>
+    
+    <h2>Select Songs:</h2>
+    {% for song in all_songs %}
+        <label>
+            <input type="checkbox" name="selected_songs" value="{{ song.id }}">
+            {{ song.song_name }} - {{ song.artist_name }}
+        </label><br>
+    {% endfor %}
+
+    <button type="submit">Create Playlist</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %} Lyrics - KrystalRhythm {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <h1>Lyrics</h1>
+            <div>
+                <h2>{{ lyrics_data.title }} - {{ lyrics_data.artist }}</h2>
+                
+                {% set words_per_line = 10 %}
+                {% set lyrics_words = lyrics_data.lyrics.split() %}
+                
+                {% for i in range(0, lyrics_words|length, words_per_line) %}
+                    <p>{{ lyrics_words[i:i+words_per_line]|join(' ') }}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
